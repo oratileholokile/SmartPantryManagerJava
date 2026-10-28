@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF7FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SMART PANTRY"
+            android:textColor="#B84F78"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Make something&#10;delicious."
+            android:textColor="#382832"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Use what you have. Waste less. Enjoy more."
+            android:textColor="#786A73"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="YOUR KITCHEN, YOUR INGREDIENTS"
+            android:textColor="#B84F78"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnPantry"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:text="My Pantry"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="#E8A3BC"
+            android:textColor="#382832" />
+
+        <Button
+            android:id="@+id/btnRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Find Recipes"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="#F2D5E0"
+            android:textColor="#382832" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Settings"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#382832" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="A little less waste, a little more goodness."
+            android:textColor="#786A73"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</ScrollView>
