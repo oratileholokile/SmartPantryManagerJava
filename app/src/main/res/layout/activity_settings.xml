@@ -10,6 +10,15 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <Button
+            android:id="@+id/btnSettingsBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:backgroundTint="#D989B5"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +50,16 @@
             android:layout_height="wrap_content"
             android:text="App version: 1.0"
             android:textColor="#555555"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnClearPantry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear Pantry"
+            android:backgroundTint="#D989B5"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 </ScrollView>
