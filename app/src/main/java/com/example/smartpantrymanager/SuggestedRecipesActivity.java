@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Button;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +22,14 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_recipes);
+        Button btnBack = new Button(this);
+        btnBack.setText("← ");
+        btnBack.setOnClickListener(v -> finish());
 
+        android.view.ViewGroup rootLayout =
+                findViewById(android.R.id.content);
+
+        rootLayout.addView(btnBack, 0);
         databaseHelper = new DatabaseHelper(this);
         message = findViewById(R.id.txtRecipeMessage);
 
