@@ -3,47 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF7FA"
-    android:padding="24dp">
+    android:padding="20dp"
+    android:background="#FFFFF5F9">
 
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:backgroundTint="#D989B5"
-        android:textColor="#FFFFFF" />
+        android:text="Back" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="My Pantry"
-        android:textColor="#9C4778"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="20dp" />
+        android:textColor="#FFB83270"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp" />
 
     <Button
         android:id="@+id/btnAddIngredient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Ingredient"
-        android:backgroundTint="#D989B5"
-        android:textColor="#FFFFFF" />
+        android:text="Add Ingredient" />
 
-    <ScrollView
+    <TextView
+        android:id="@+id/txtPantryEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your pantry is empty. Add your first ingredient!"
+        android:textSize="16sp"
+        android:textColor="#FF9C4778"
+        android:padding="8dp"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerIngredients"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp">
-
-        <LinearLayout
-            android:id="@+id/ingredientContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-    </ScrollView>
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp" />
 
 </LinearLayout>

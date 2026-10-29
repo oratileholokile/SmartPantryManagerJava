@@ -5,10 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Button;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,29 +21,49 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_recipes);
-        Button btnBack = new Button(this);
-        btnBack.setText("← ");
-        btnBack.setOnClickListener(v -> finish());
 
-        android.view.ViewGroup rootLayout =
-                findViewById(android.R.id.content);
-
-        rootLayout.addView(btnBack, 0);
         databaseHelper = new DatabaseHelper(this);
         message = findViewById(R.id.txtRecipeMessage);
+
+        LinearLayout parent = (LinearLayout) message.getParent();
+
+        Button btnBack = new Button(this);
+        btnBack.setText("Back");
+        btnBack.setOnClickListener(v -> finish());
+
+        LinearLayout.LayoutParams backParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        parent.addView(btnBack, parent.indexOfChild(message), backParams);
+
+        Button btnAllRecipes = new Button(this);
+        btnAllRecipes.setText("All Recipes");
+
+        Button btnAvailableRecipes = new Button(this);
+        btnAvailableRecipes.setText("Find Recipes I Can Make");
+
+        int messageIndex = parent.indexOfChild(message);
+
+        parent.addView(btnAllRecipes, messageIndex + 1);
+        parent.addView(btnAvailableRecipes, messageIndex + 2);
 
         recipeContainer = new LinearLayout(this);
         recipeContainer.setOrientation(LinearLayout.VERTICAL);
         recipeContainer.setPadding(0, 12, 0, 12);
 
-        if (message.getParent() instanceof LinearLayout) {
-            LinearLayout parent = (LinearLayout) message.getParent();
-            int index = parent.indexOfChild(message);
-            parent.addView(recipeContainer, index + 1,
-                    new LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
+        parent.addView(
+                recipeContainer,
+                messageIndex + 3,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        btnAllRecipes.setOnClickListener(v -> displayRecipes(false));
+
+        btnAvailableRecipes.setOnClickListener(
+                v -> displayRecipes(true));
 
         databaseHelper.insertSampleRecipes();
     }
@@ -52,51 +71,83 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        displayRecipes();
+        displayRecipes(false);
     }
 
-    private void displayRecipes() {
+    private void displayRecipes(boolean availableOnly) {
         recipeContainer.removeAllViews();
 
-        Cursor cursor = databaseHelper.getAvailableRecipes();
+        Cursor cursor;
 
-        if (cursor.getCount() == 0) {
-            message.setText("No recipes available yet. Add the required ingredients and quantities to your pantry.");
+        if (availableOnly) {
+            cursor = databaseHelper.getAvailableRecipes();
         } else {
-            message.setText("Recipes you can make:");
+            cursor = databaseHelper.getAllRecipes();
         }
 
-        while (cursor.moveToNext()) {
-            int recipeId = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-            String instructions = cursor.getString(cursor.getColumnIndexOrThrow("instructions"));
+        try {
+            if (cursor.getCount() == 0) {
+                if (availableOnly) {
+                    message.setText(
+                            "No recipes can be made with your current pantry ingredients. Add more ingredients or quantities.");
+                } else {
+                    message.setText("No recipes found.");
+                }
+                return;
+            }
 
-            TextView recipe = new TextView(this);
-            recipe.setText(name + "\n" + instructions + "\nTap to view details");
-            recipe.setTextSize(16);
-            recipe.setTextColor(0xFF333333);
-            recipe.setBackgroundColor(0xFFFFE8F2);
-            recipe.setPadding(20, 20, 20, 20);
+            if (availableOnly) {
+                message.setText("Recipes You Can Make:");
+            } else {
+                message.setText("All Recipes:");
+            }
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 0, 16);
-            recipe.setLayoutParams(params);
+            while (cursor.moveToNext()) {
+                final int recipeId = cursor.getInt(
+                        cursor.getColumnIndexOrThrow("id"));
 
-            recipe.setOnClickListener(v -> {
-                Intent intent = new Intent(
-                        SuggestedRecipesActivity.this,
-                        RecipeDetailActivity.class);
-                intent.putExtra("recipeId", recipeId);
-                intent.putExtra("recipeName", name);
-                intent.putExtra("instructions", instructions);
-                startActivity(intent);
-            });
+                final String name = cursor.getString(
+                        cursor.getColumnIndexOrThrow("name"));
 
-            recipeContainer.addView(recipe);
+                final String instructions = cursor.getString(
+                        cursor.getColumnIndexOrThrow("instructions"));
+
+                TextView recipe = new TextView(this);
+
+                recipe.setText(
+                        name + "\n\n" + instructions +
+                                "\n\nTap to view details");
+
+                recipe.setTextSize(16);
+                recipe.setTextColor(0xFF333333);
+                recipe.setBackgroundColor(0xFFFFE8F2);
+                recipe.setPadding(20, 20, 20, 20);
+
+                LinearLayout.LayoutParams params =
+                        new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                params.setMargins(0, 0, 0, 16);
+                recipe.setLayoutParams(params);
+
+                recipe.setOnClickListener(v -> {
+                    Intent intent = new Intent(
+                            SuggestedRecipesActivity.this,
+                            RecipeDetailActivity.class);
+
+                    intent.putExtra("recipeId", recipeId);
+                    intent.putExtra("recipeName", name);
+                    intent.putExtra("instructions", instructions);
+
+                    startActivity(intent);
+                });
+
+                recipeContainer.addView(recipe);
+            }
+
+        } finally {
+            cursor.close();
         }
-
-        cursor.close();
     }
 }
