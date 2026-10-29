@@ -1,30 +1,61 @@
+
 package com.example.smartpantrymanager;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RecipeDetailActivity extends AppCompatActivity {
+
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        TextView txtRecipeName = findViewById(R.id.txtRecipeName);
-        TextView txtIngredients = findViewById(R.id.txtRecipeIngredients);
-        TextView txtInstructions = findViewById(R.id.txtRecipeInstructions);
+        databaseHelper = new DatabaseHelper(this);
 
-        String name = getIntent().getStringExtra("recipeName");
-        String ingredients = getIntent().getStringExtra("ingredients");
+        TextView txtRecipeName = findViewById(R.id.txtRecipeName);
+        TextView txtRecipeIngredients = findViewById(R.id.txtRecipeIngredients);
+        TextView txtRecipeInstructions = findViewById(R.id.txtRecipeInstructions);
+
+        int recipeId = getIntent().getIntExtra("recipeId", -1);
+        String recipeName = getIntent().getStringExtra("recipeName");
         String instructions = getIntent().getStringExtra("instructions");
 
-        txtRecipeName.setText(name == null ? "Recipe" : name);
-        txtIngredients.setText(
-                ingredients == null ? "No ingredients listed." : ingredients
-        );
-        txtInstructions.setText(
-                instructions == null ? "No instructions available." : instructions
-        );
+        txtRecipeName.setText(recipeName == null ? "Recipe Details" : recipeName);
+        txtRecipeInstructions.setText(
+                instructions == null ? "No instructions available." : instructions);
+
+        StringBuilder ingredientsText = new StringBuilder();
+
+        if (recipeId != -1) {
+            Cursor cursor = databaseHelper.getRecipeIngredients(recipeId);
+
+            while (cursor.moveToNext()) {
+                String name = cursor.getString(0);
+                double quantity = cursor.getDouble(1);
+                String unit = cursor.getString(2);
+
+                ingredientsText.append("• ")
+                        .append(name)
+                        .append(" — ")
+                        .append(quantity)
+                        .append(" ")
+                        .append(unit)
+                        .append("\n");
+            }
+
+            cursor.close();
+        }
+
+        if (ingredientsText.length() == 0) {
+            ingredientsText.append("No ingredients listed.");
+        }
+
+        txtRecipeIngredients.setText(ingredientsText.toString());
     }
 }
