@@ -119,6 +119,16 @@ public class PantryActivity extends AppCompatActivity {
             buttons.addView(deleteButton);
             item.addView(buttons);
             ingredientContainer.addView(item);
+
+            android.view.View divider = new android.view.View(this);
+            divider.setBackgroundColor(0xFFDDDDDD);
+
+            LinearLayout.LayoutParams dividerParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, 1);
+
+            divider.setLayoutParams(dividerParams);
+            ingredientContainer.addView(divider);
         }
 
         cursor.close();
