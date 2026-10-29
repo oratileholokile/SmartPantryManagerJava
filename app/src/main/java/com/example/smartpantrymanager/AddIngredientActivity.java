@@ -101,8 +101,11 @@ public class AddIngredientActivity extends AppCompatActivity {
         }
 
         if (success) {
-            Toast.makeText(this, "Ingredient saved successfully",
-                    Toast.LENGTH_SHORT).show();
+            String message = ingredientId == -1
+                    ? "Ingredient added successfully"
+                    : "Ingredient updated successfully";
+
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             finish();
         } else {
             Toast.makeText(this, "Could not save ingredient",
